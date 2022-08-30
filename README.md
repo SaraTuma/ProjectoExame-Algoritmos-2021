@@ -1,6 +1,8 @@
 # ProjectoExame-Algoritmos-2021
 ## Editor de texto
 
+
+
 1. Objectivo
    -   Este programa tem por objectivo aprofundar os conhecimentos no desenvolvimento de software com o tipo abstrato de dados, e na consolidação dos seguintes temas:
        -   Cadeias de caracteres
@@ -20,4 +22,17 @@
        - A linha m deve tornar-se a linha corrente.
      - $localizar %x
        - Localizar no texto, todas ocorrências da cadeia de caracteres x.
+     - $alterar % x % y %
+       - Na linha corrente, cada ocorrência da cadeia x deve ser substituida pela cadeia y.
+     - $ultimo
+       - Deve imprimir o número da última linha do texto
+     - $imprimir m,n
+       - Devem ser impresas todas as linhas do texto, e o número de linhas, das linhas m até n, inclusive n.
+       - Deve ser emitido um erro se :
+         - For omitido um número ou a virgula no comando ;
+         - n for menor que m ;
+         - m for menor que 1 ou n maior que o último número de linha do texto.
+       - $fim
+         - Termina a execução do editor de texto;
+         - Uma mensagem de erro deve ser impressa para qualquer comando incorrecto, como sendo $end, $insere, etc.
 
