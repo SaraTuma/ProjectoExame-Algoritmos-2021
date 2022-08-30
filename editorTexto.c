@@ -204,7 +204,7 @@ void executarInvertido(int cod)
 	remover ou imprimir naquele intervalo.
 * Parametros :
 	* lista - a lista de atomos
-	* a - primeiro numero digitado
+	* a - primeiro numero digitado 
 	* b - segundo numero digitado
 	* n - tamanho da lista
 	* op - opcao : 1 para imprimir  e 0 para remover
@@ -235,7 +235,7 @@ int verificarNumeros(TLista *lista,TPilha * pilha,int a, int b,int n,int op)
 		imprimir naquele intervalo.
 *	Parametros :
 	* lista - a lista de atomos
-	* a - primeiro numero digitado
+	* a - primeiro numero digitado (linha de inicio da inversao da lista)
 	* b - segundo numero digitado
 	* n - tamanho da lista
 *	Devolve : lista
@@ -304,7 +304,7 @@ int imprimirListainvertido(TLista lista, int ini, int fim)
 	{
 		if (paux->info.chave <= ini && (fim <= ini && fim > 0))
 		{
-			//printf("\nini: %d - qtd : %d \n",ini,fim);
+			printf("\nini: %d - qtd : %d \n",ini,fim);
 			if (paux->info.chave == linhaCorrente)
 				printf("%d → %s\n", paux->info.chave, paux->info.frase);
 			else
@@ -360,6 +360,7 @@ int localizarFrase(TLista lista, char * frase)
 		//percorrer cada frase
 		for(int i=0;paux->info.frase[i]!='\0';i++){
 			cont=0; pos=i;
+			int inicio=i, fim=i;
 			//percorrer cada letra da frase
 			for(int j=0;j<size; j++,pos++){
 				if(paux->info.frase[pos]=='\0')
@@ -380,6 +381,7 @@ int localizarFrase(TLista lista, char * frase)
 					pos++;
 				}
 				i=(i+size)-1;
+				//printf("\n Posição : %d - letra %c\n",i,paux->info.frase[i]);
 				//caso contrario vou imprimir o caracter daquela posicao [i]
 			}else
 				printf("%c",paux->info.frase[i]);
@@ -390,6 +392,61 @@ int localizarFrase(TLista lista, char * frase)
 	if(encontrei) return OK;
 	return FRASE_NOTFOUND;
 }
+
+
+int localizarFrase_NEW(TLista lista, char * frase)
+{
+	printf("\n-----------------------------------");
+	int pos;
+	int cont=0, encontrei=0, vezesAImprimir=0;
+	int size = tamanhoString(frase), flagImpressao=0;
+	for (TAtomo *paux = lista.primeiro; paux != NULL; paux = paux->dprox)
+	{
+		//Para imprimir os tracos →
+		if(paux->info.chave==linhaCorrente)
+			printf("\n%d → ",paux->info.chave);
+		else
+			printf("\n%d ",paux->info.chave);
+		//percorrer cada frase
+		for(int i=0;paux->info.frase[i]!='\0';i++){
+			cont=0; pos=i;
+			int inicio=i, fim=i;
+			
+			//percorrer cada letra da frase
+			for(int j=0;j<size; j++,pos++){
+				//se for igual vou somando "cont"
+				if(paux->info.frase[pos]!=*(frase+j))
+					break;
+				else
+					cont++;
+			}
+			if(cont == size){
+				flagImpressao=1; vezesAImprimir=cont;
+			}
+			//se encontrei a substring completa, vou pintar
+			if(flagImpressao==1){
+				encontrei=1;
+				if (vezesAImprimir != 0)
+				{
+					printf("\033[32;1m%c\033[0m", *(paux->info.frase + i));
+					vezesAImprimir--;
+				}
+				else
+				{
+					printf("%c", *(paux->info.frase + i));
+					flagImpressao = 0;
+					vezesAImprimir = 0;
+				}
+		}else
+				printf("%c",paux->info.frase[i]);
+		}
+		printf("\n");
+	}
+	printf("-------------------------------------\n");
+	if(encontrei) return OK;
+	return FRASE_NOTFOUND;
+}
+
 
 /*
 * Procedimento : arrastarStringFim
@@ -1458,7 +1515,7 @@ int executarComandoPercentagens(TLista *lista,TPilha * pilha,char *frase){
 				int tam=tamanhoString(operacao);
 				if(tam==0) return FRASE_NOTFOUND;
 				if(tam>TAM) return NO_SPACE;
-				return localizarFrase(*lista,operacao);
+				return localizarFrase_NEW(*lista,operacao);
 					
 	}
 	else if(verifLocalizarAlterar(frase,"$carregar",percentagem))
@@ -1510,13 +1567,12 @@ int executarComandoPercentagens(TLista *lista,TPilha * pilha,char *frase){
 	{
 		if(vaziaLista(*lista)) return LIST_EMPTY;
 		if(percentagem==-1) return FALTA_PERCENTAGEM;
-				percentagem= guardarNum(percentagem+1,'%',frase, operacao);	
-				//printf("\n Frase : %s\n",operacao);
-				int tam=tamanhoString(operacao);
-				if(tam==0) return FRASE_NOTFOUND;
-				if(tam>=TAM) return NO_SPACE;
-				return removerFrase(lista,pilha,operacao);
-					
+		percentagem= guardarNum(percentagem+1,'%',frase, operacao);	
+		//printf("\n Frase : %s\n",operacao);
+		int tam=tamanhoString(operacao);
+		if(tam==0) return FRASE_NOTFOUND;
+		if(tam>=TAM) return NO_SPACE;
+		return removerFrase(lista,pilha,operacao);		
 	}
 	else
 	return COMANDO_INVALIDO;
@@ -1576,6 +1632,10 @@ int executarComandoDigitos(TLista *lista,TPilha * pilha,char *frase){
 		else if (verifOperacaoPosicao(frase, "$prnenv", pos))
 	{
 
+		/*Comando para imprimir a lista na ordem invertida, 
+		começando pela linha do num1 e com a quantidade
+		de linhas a imprimir que é num2 */
+
 		if (vaziaLista(*lista))
 			return LIST_EMPTY;
 
@@ -1590,7 +1650,7 @@ int executarComandoDigitos(TLista *lista,TPilha * pilha,char *frase){
 			// VERIFICAR SE DIGITOU ALGUMA LETRA ENTRE OS NUMEROS
 			if (!verifDigito(operacao))
 				return INVALIDS_POSSISIONS;
-
+			//
 			num1 = myAtoi(operacao);
 
 			pos = guardarNum(pos, '\0', frase, operacao);

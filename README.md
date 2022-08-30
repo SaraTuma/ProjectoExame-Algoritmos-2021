@@ -11,7 +11,7 @@
    - Desenvolva um programa para implementar um pequeno editor de texto, baseado em linha de comando. 
    - Por definição, um editor de texto é um programa que processa texto, linha por linha. Suponhamos que cada linha tenha exatamente 80 caracteres. 
    - Cada comando de edição começa com o caracter cifrão (e nenhuma outra linha começa com esse caracter).
-   - Este editor possui 8 comandos:
+   - Este editor possui os segintes comandos:
      - $inserir
        - Permite inserir uma porção de texto depois da linha corrente;
        - A linha é indicada pelo caracter "->". 
@@ -35,4 +35,14 @@
        - $fim
          - Termina a execução do editor de texto;
          - Uma mensagem de erro deve ser impressa para qualquer comando incorrecto, como sendo $end, $insere, etc.
+  3. Novos comandos
+     1. $prnenv
+         -  Serve para imprimir a lista em ordem decrescente;
+         -  Recebe dois parametros (números) separados por uma virgula;
+         -  O primeiro identifica a linha por onde começar;
+         -  O segundo, quantas linhas a cima devem ser impresas.
+        <code>
+        $prnenv 4,2
+        
+        </code>
 
